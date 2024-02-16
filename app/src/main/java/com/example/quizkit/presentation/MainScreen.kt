@@ -8,6 +8,7 @@ import com.example.quizkit.R
 import com.example.quizkit.ui.component.BottomBar
 import com.example.quizkit.ui.component.FloatingButton
 import com.example.quizkit.ui.component.TopBar
+import com.example.quizkit.ui.screen.home.HomeScreen
 
 @Composable
 fun MainScreen(){
@@ -18,6 +19,6 @@ fun MainScreen(){
         bottomBar = { BottomBar()},
         containerColor = colorResource(id = R.color.primary_purple)
     ) {
-        it
+        HomeScreen(it)
     }
 }

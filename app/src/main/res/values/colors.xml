@@ -16,4 +16,5 @@
     <color name="primary_blue">#FFE5EEFF</color>
     <color name="secondary_blue">#FFC6D8FC</color>
     <color name="tertiary_blue">#FFEFEEFC</color>
+    <color name="white_background">#FFFEFCFF</color>
 </resources>
