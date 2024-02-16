@@ -8,7 +8,7 @@ fun MainApp(){
     MainScreen()
 }
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 fun MainAppPreview(){
     MainApp()

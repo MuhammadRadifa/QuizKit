@@ -7,10 +7,12 @@ import androidx.compose.ui.res.colorResource
 import com.example.quizkit.R
 import com.example.quizkit.ui.component.BottomBar
 import com.example.quizkit.ui.component.FloatingButton
+import com.example.quizkit.ui.component.TopBar
 
 @Composable
 fun MainScreen(){
     Scaffold(
+        topBar = { TopBar(title = "home")},
         floatingActionButton = { FloatingButton()},
         floatingActionButtonPosition = FabPosition.Center,
         bottomBar = { BottomBar()},
