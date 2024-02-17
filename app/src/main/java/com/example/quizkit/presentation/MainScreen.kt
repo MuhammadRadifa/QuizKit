@@ -8,9 +8,8 @@ import com.example.quizkit.R
 import com.example.quizkit.ui.component.BottomBar
 import com.example.quizkit.ui.component.FloatingButton
 import com.example.quizkit.ui.component.TopBar
-import com.example.quizkit.ui.screen.category.CategoryListScreen
 import com.example.quizkit.ui.screen.category.CategoryScreen
-import com.example.quizkit.ui.screen.home.HomeScreen
+import com.example.quizkit.ui.screen.shared.ListScreen
 
 @Composable
 fun MainScreen(){
@@ -22,7 +21,7 @@ fun MainScreen(){
         containerColor = colorResource(id = R.color.primary_purple)
     ) {
         //HomeScreen(it)
-        //CategoryScreen(it)
-        CategoryListScreen(it)
+        CategoryScreen(it)
+        //ListScreen(innerPadding = it)
     }
 }

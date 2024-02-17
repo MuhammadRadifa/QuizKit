@@ -38,9 +38,9 @@ fun CategoryScreen(innerPadding:PaddingValues){
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .padding(innerPadding),
+            .padding(innerPadding).padding(top = 20.dp),
         color = colorResource(id = R.color.white_background),
-        shape = RoundedCornerShape(topStartPercent = 16, topEndPercent = 16)
+        shape = RoundedCornerShape(topStartPercent = 8, topEndPercent = 8)
     ) {
         LazyVerticalGrid(modifier = Modifier
             .padding(20.dp)
