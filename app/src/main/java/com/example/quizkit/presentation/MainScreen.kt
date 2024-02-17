@@ -8,6 +8,7 @@ import com.example.quizkit.R
 import com.example.quizkit.ui.component.BottomBar
 import com.example.quizkit.ui.component.FloatingButton
 import com.example.quizkit.ui.component.TopBar
+import com.example.quizkit.ui.screen.category.CategoryListScreen
 import com.example.quizkit.ui.screen.category.CategoryScreen
 import com.example.quizkit.ui.screen.home.HomeScreen
 
@@ -21,6 +22,7 @@ fun MainScreen(){
         containerColor = colorResource(id = R.color.primary_purple)
     ) {
         //HomeScreen(it)
-        CategoryScreen(it)
+        //CategoryScreen(it)
+        CategoryListScreen(it)
     }
 }
