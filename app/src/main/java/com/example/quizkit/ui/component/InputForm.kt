@@ -19,7 +19,15 @@ import androidx.compose.ui.unit.sp
 import com.example.quizkit.R
 
 @Composable
-fun InputForm(title:String,icon:Int,onChange:(String)->Unit){
+fun InputForm(
+    title:String,icon:Int,
+    disable:Boolean = false,
+    colorPaint:Int = R.color.white,
+    value:String= "",
+    onChange:(String)->Unit){
+    val textInput = ""
+
+
     Spacer(modifier = Modifier.height(12.dp))
     Text(
         text = title,
@@ -29,7 +37,7 @@ fun InputForm(title:String,icon:Int,onChange:(String)->Unit){
     Spacer(modifier = Modifier.height(8.dp))
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
-        value = "",
+        value = value.ifBlank { textInput },
         onValueChange = {},
         leadingIcon = {
             Icon(
@@ -39,9 +47,9 @@ fun InputForm(title:String,icon:Int,onChange:(String)->Unit){
             )
         },
         colors = TextFieldDefaults.colors(
-            unfocusedContainerColor = Color.White,
-            unfocusedIndicatorColor = Color.White
+            unfocusedContainerColor = colorResource(id = colorPaint),
+            unfocusedIndicatorColor = colorResource(id = colorPaint)
         ),
-        label = { Text(text = "Your $title") }
+        //label = { Text(text = "Your $title") }
     )
 }
