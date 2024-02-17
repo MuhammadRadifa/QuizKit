@@ -8,17 +8,19 @@ import com.example.quizkit.R
 import com.example.quizkit.ui.component.BottomBar
 import com.example.quizkit.ui.component.FloatingButton
 import com.example.quizkit.ui.component.TopBar
+import com.example.quizkit.ui.screen.category.CategoryScreen
 import com.example.quizkit.ui.screen.home.HomeScreen
 
 @Composable
 fun MainScreen(){
     Scaffold(
-        topBar = { TopBar(title = "home")},
+        topBar = { TopBar(title = "Category")},
         floatingActionButton = { FloatingButton()},
         floatingActionButtonPosition = FabPosition.Center,
         bottomBar = { BottomBar()},
         containerColor = colorResource(id = R.color.primary_purple)
     ) {
-        HomeScreen(it)
+        //HomeScreen(it)
+        CategoryScreen(it)
     }
 }

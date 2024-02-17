@@ -49,6 +49,9 @@ fun TopBar(title:String){
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarLeftIcon(title:String){
+
+    val colorPaint:Color = if(title == "login" || title == "register")Color.Black else Color.White
+
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(horizontal = 16.dp),
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -58,14 +61,14 @@ fun TopBarLeftIcon(title:String){
             Text(
                 text = title,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = colorPaint,
                 fontSize = 28.sp
             ) },
         navigationIcon = {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "",
-                tint = Color.Black,
+                tint = colorPaint,
                 modifier = Modifier.size(40.dp)
             )
         }
