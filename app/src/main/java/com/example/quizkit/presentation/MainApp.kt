@@ -10,6 +10,6 @@ fun MainApp(){
 
 @Preview(showSystemUi = true)
 @Composable
-fun MainAppPreview(){
+fun MainAppPreview() {
     MainApp()
 }

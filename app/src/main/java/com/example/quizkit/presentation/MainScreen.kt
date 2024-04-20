@@ -22,8 +22,8 @@ fun MainScreen(){
         containerColor = colorResource(id = R.color.primary_purple)
     ) {
         //HomeScreen(it)
-        //CategoryScreen(it)
+        CategoryScreen(it)
         //ListScreen(innerPadding = it)
-        ProfileScreen(innerPadding = it)
+//        ProfileScreen(innerPadding = it)
     }
 }
