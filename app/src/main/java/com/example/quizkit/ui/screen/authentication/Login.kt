@@ -10,6 +10,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.SpanStyle
@@ -18,14 +19,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.quizkit.R
 import com.example.quizkit.ui.component.InputForm
 import com.example.quizkit.ui.component.TopBar
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(navController: NavController){
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
     Scaffold(
-        topBar = { TopBar("Login")},
+        topBar = { TopBar(navBackStackEntry = navBackStackEntry) },
         containerColor = colorResource(id = R.color.tertiary_blue)
     ) {
         Column(

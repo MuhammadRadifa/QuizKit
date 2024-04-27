@@ -33,8 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.quizkit.R
-import com.example.quizkit.data.avatarProfile
-import com.example.quizkit.data.backgroundProfile
+import com.example.quizkit.data.common.avatarProfile
+import com.example.quizkit.data.common.backgroundProfile
 
 @Preview
 @Composable

@@ -27,8 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.quizkit.R
-import com.example.quizkit.data.Category
-import com.example.quizkit.data.itemCategory
+import com.example.quizkit.data.common.Category
+import com.example.quizkit.data.common.itemCategory
 
 @Composable
 fun CategoryScreen(innerPadding:PaddingValues){
@@ -52,7 +52,7 @@ fun CategoryScreen(innerPadding:PaddingValues){
 }
 
 @Composable
-fun CategoryCardItem(items:Category){
+fun CategoryCardItem(items: Category){
     Card(
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.tertiary_purple),

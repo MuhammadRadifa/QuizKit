@@ -1,4 +1,4 @@
-package com.example.quizkit.data
+package com.example.quizkit.data.common
 
 import com.example.quizkit.R
 
@@ -9,11 +9,11 @@ data class NavigationItem(
 
 val itemNavigation = listOf<NavigationItem>(
     NavigationItem(
-        title = "Home",
+        title = Screen.Home.route,
         icon = R.drawable.home
     ),
     NavigationItem(
-        title = "Category",
+        title = Screen.Category.route,
         icon = R.drawable.categories
     ),
     NavigationItem(
@@ -21,11 +21,11 @@ val itemNavigation = listOf<NavigationItem>(
         icon = R.drawable.rocket
     ),
     NavigationItem(
-        title = "History",
+        title = Screen.History.route,
         icon = R.drawable.history
     ),
     NavigationItem(
-        title = "Profile",
+        title = Screen.Profile.route,
         icon = R.drawable.profile
     )
 )

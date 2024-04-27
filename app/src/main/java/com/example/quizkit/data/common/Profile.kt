@@ -1,4 +1,4 @@
-package com.example.quizkit.data
+package com.example.quizkit.data.common
 
 import com.example.quizkit.R
 
