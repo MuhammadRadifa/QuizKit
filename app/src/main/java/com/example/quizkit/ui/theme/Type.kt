@@ -8,18 +8,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.quizkit.R
 
-val monserratFamily = FontFamily(
-    Font(R.font.light,FontWeight.Light),
-    Font(R.font.regular,FontWeight.Normal),
-    Font(R.font.medium,FontWeight.Medium),
-    Font(R.font.semibold,FontWeight.SemiBold),
-    Font(R.font.bold,FontWeight.Bold),
-)
+//val monserratFamily = FontFamily(
+//    Font(R.font.light,FontWeight.Light),
+//    Font(R.font.regular,FontWeight.Normal),
+//    Font(R.font.medium,FontWeight.Medium),
+//    Font(R.font.semibold,FontWeight.SemiBold),
+//    Font(R.font.bold,FontWeight.Bold),
+//)
 
 // Set of Material typography styles to start with
 val Typography = Typography(
+//    bodyLarge = TextStyle(
+//        fontFamily = monserratFamily,
+//        fontWeight = FontWeight.Normal,
+//        fontSize = 16.sp,
+//        lineHeight = 24.sp,
+//        letterSpacing = 0.5.sp
+//    )
     bodyLarge = TextStyle(
-        fontFamily = monserratFamily,
+        fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
