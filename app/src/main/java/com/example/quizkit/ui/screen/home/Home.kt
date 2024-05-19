@@ -1,6 +1,7 @@
 package com.example.quizkit.ui.screen.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,10 +22,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,69 +39,84 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.quizkit.R
 import com.example.quizkit.ui.component.CardQuiz
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen(innerPadding:PaddingValues = PaddingValues(20.dp)){
-    Column(
-        Modifier
-            .padding(innerPadding)
-            ) {
+fun HomeScreen(
+    navigateToQuiz: (String) -> Unit,
+    navigateToCategory: () -> Unit,
+    homeViewModel: HomeViewModel = koinViewModel()
+) {
+    Column {
         Column(Modifier.padding(20.dp)) {
             Spacer(modifier = Modifier.height(16.dp))
-            RecentBoard()
+            RecentBoard(homeViewModel, navigateToQuiz, navigateToCategory)
             Spacer(modifier = Modifier.height(16.dp))
-            PlayBoard()
+            PlayBoard(navigateToCategory)
         }
-        PopularList()
+        PopularList(navigateToQuiz, navigateToCategory)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecentBoard(){
-    val recentList = listOf<String>("a")
+fun RecentBoard(
+    homeViewModel: HomeViewModel,
+    navigateToQuiz: (String) -> Unit,
+    navigateToCategory: () -> Unit
+) {
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(90.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFE4EAFF),
-        )
-    ) {
-        Row(
-            Modifier
+    homeViewModel.getLatestHistory().collectAsState(initial = null).value.let { history ->
+        Card(
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
-                Text(
-                    text = if(recentList.isNotEmpty())"Recent Quiz" else "Lets Play Quiz",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 24.sp
-                )
-                if(recentList.isNotEmpty()){
-                    Text(
-                        text = "History - Education",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 18.sp,
-                        color = colorResource(id = R.color.text_purple)
-                    )
-                }
-
+                .height(90.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFFE4EAFF),
+            ),
+            onClick = {
+                if (history != null) navigateToQuiz(history.category) else
+                    navigateToCategory()
             }
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowRight, 
-                contentDescription = "recent-play",
-                modifier = Modifier.size(30.dp),
-                tint = colorResource(id = R.color.text_purple)
+        ) {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Column(Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center) {
+                    Text(
+                        text = if (history != null) "Recent Quiz" else "Lets Play Quiz",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 24.sp
+                    )
+                    if (history != null) {
+                        Text(
+                            text = "${history.quiz} - ${history.category}",
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 18.sp,
+                            color = colorResource(id = R.color.text_purple)
+                        )
+                    }
+
+                }
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = "recent-play",
+                    modifier = Modifier.size(30.dp),
+                    tint = colorResource(id = R.color.text_purple)
                 )
+            }
+
         }
     }
 }
 
 @Composable
-fun PlayBoard(){
+fun PlayBoard(navigateToCategory: () -> Unit) {
     Surface(color = Color(0x4DF1F4FF), shape = RoundedCornerShape(12)) {
         Column(
             Modifier
@@ -116,7 +134,7 @@ fun PlayBoard(){
             )
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = navigateToCategory,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = colorResource(id = R.color.text_purple)
@@ -129,7 +147,7 @@ fun PlayBoard(){
 }
 
 @Composable
-fun PopularList(){
+fun PopularList(navigateToQuiz: (String) -> Unit, navigateToCategory: () -> Unit) {
     Surface(
         Modifier
             .fillMaxSize(),
@@ -139,8 +157,13 @@ fun PopularList(){
         Column(
             Modifier
                 .padding(20.dp)
-                .padding(top = 16.dp)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.Bottom) {
+                .padding(top = 16.dp)
+        ) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
                 Text(
                     text = "Popular Quiz",
                     fontWeight = FontWeight.Medium,
@@ -150,13 +173,14 @@ fun PopularList(){
                     text = "See All",
                     fontWeight = FontWeight.Medium,
                     fontSize = 18.sp,
-                    color = colorResource(id = R.color.text_purple)
+                    color = colorResource(id = R.color.text_purple),
+                    modifier = Modifier.clickable { navigateToCategory() }
                 )
             }
             Column {
                 Spacer(modifier = Modifier.height(12.dp))
-                CardQuiz()
-                CardQuiz()
+                CardQuiz("Education", "Geography", navigateToQuiz)
+                CardQuiz("Showbiz", "Video Games", navigateToQuiz)
             }
         }
     }
