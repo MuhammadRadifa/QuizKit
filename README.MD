@@ -1,4 +1,4 @@
-<img src="./Thumbnail.png"/>
+<img src="./thumbnail.png"/>
 
 # <b>QUIZ KIT</b>
 
