@@ -22,7 +22,7 @@ Check out the live demo of Quiz Kit [CLICK DEMO VIDEO HERE](https://www.youtube.
 1. Clone the repository:
 
    ```
-   git clone https://github.com/yourusername/quizkit.git
+   git clone https://github.com/MuhammadRadifa/QuizKit.git
 
    cd cd quizkit
    ```
