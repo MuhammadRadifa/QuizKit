@@ -14,5 +14,14 @@ sealed class Screen(val route: String) {
     data object Profile : Screen("Profile")
     data object History : Screen("History")
     data object List : Screen("List")
+    data object SelectQuiz : Screen("SelectQuiz")
+
+    //quiz screen
+    data object QuizStart : Screen("QuizStart")
+    data object QuizQuestion : Screen("QuizQuestion")
+    data object QuizResult : Screen("QuizResult")
+    data object QuizMode : Screen("QuizDetail")
+    data object QuizOption : Screen("QuizOption")
 }
+
 

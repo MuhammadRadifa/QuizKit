@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.example.quizkit.R
 
 @Composable
-fun FloatingButton(){
+fun FloatingButton(navigateToCategory: () -> Unit){
     FloatingActionButton(
         modifier = Modifier
             .offset(y = 60.dp)
@@ -25,7 +25,9 @@ fun FloatingButton(){
                 shape = CircleShape
             ),
         shape = CircleShape,
-        onClick = { /*TODO*/ },
+        onClick = {
+            navigateToCategory()
+        },
         containerColor = colorResource(id = R.color.primary_purple),
         contentColor = colorResource(id = R.color.white)
     ) {

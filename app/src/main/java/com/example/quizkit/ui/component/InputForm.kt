@@ -23,7 +23,7 @@ fun InputForm(
     title:String,icon:Int,
     disable:Boolean = false,
     colorPaint:Int = R.color.white,
-    value:String= "",
+    value:String,
     onChange:(String)->Unit){
     val textInput = ""
 
@@ -38,7 +38,7 @@ fun InputForm(
     OutlinedTextField(
         modifier = Modifier.fillMaxWidth(),
         value = value.ifBlank { textInput },
-        onValueChange = {},
+        onValueChange = onChange,
         leadingIcon = {
             Icon(
                 painter = painterResource(id = icon),
@@ -50,6 +50,12 @@ fun InputForm(
             unfocusedContainerColor = colorResource(id = colorPaint),
             unfocusedIndicatorColor = colorResource(id = colorPaint)
         ),
-        //label = { Text(text = "Your $title") }
+        placeholder = {
+            Text(
+                text = title,
+                color = Color.Gray,
+                fontSize = 16.sp
+            )
+        },
     )
 }

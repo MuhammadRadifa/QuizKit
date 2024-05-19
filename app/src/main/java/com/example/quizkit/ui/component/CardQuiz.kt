@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,14 +33,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.quizkit.R
+import com.example.quizkit.data.common.iconCategory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CardQuiz(){
+fun CardQuiz(category:String,quizCategory: String,navigateToQuiz: (String) -> Unit){
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
         ),
-        border = BorderStroke(1.dp, color = colorResource(id = R.color.secondary_blue))
+        border = BorderStroke(1.dp, color = colorResource(id = R.color.secondary_blue)),
+        onClick = {
+            navigateToQuiz(category)
+        },
     ) {
         Row(
             Modifier
@@ -51,7 +57,7 @@ fun CardQuiz(){
                     shape = RoundedCornerShape(10.dp),
                 ) {
                     Icon(
-                        painter = painterResource(id =R.drawable.games),
+                        painter = painterResource(id = iconCategory[category] ?: R.drawable.box_stype),
                         contentDescription = "logo",
                         modifier = Modifier.padding(10.dp),
                         tint = colorResource(id = R.color.primary_purple)
@@ -60,12 +66,12 @@ fun CardQuiz(){
                 Spacer(modifier = Modifier.width(8.dp))
                 Column {
                     Text(
-                        text = "Video Games",
+                        text = quizCategory,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Medium
                     )
                     Text(
-                        text = "Entertaiment",
+                        text = category,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Light
                     )
