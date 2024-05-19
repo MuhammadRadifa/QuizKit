@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,11 +32,11 @@ import com.example.quizkit.data.common.Category
 import com.example.quizkit.data.common.itemCategory
 
 @Composable
-fun CategoryScreen(innerPadding:PaddingValues){
+fun CategoryScreen(navigateToQuiz: (String) -> Unit){
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .padding(innerPadding).padding(top = 20.dp),
+            .padding(top = 20.dp),
         color = colorResource(id = R.color.white_background),
         shape = RoundedCornerShape(topStartPercent = 8, topEndPercent = 8)
     ) {
@@ -45,14 +46,17 @@ fun CategoryScreen(innerPadding:PaddingValues){
             .fillMaxWidth(),columns = GridCells.Fixed(2)){
             items(itemCategory){
                 category ->
-                CategoryCardItem(items = category)
+                CategoryCardItem(items = category,onClick = {
+                    navigateToQuiz(category.title)
+                })
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryCardItem(items: Category){
+fun CategoryCardItem(items: Category,onClick: () -> Unit){
     Card(
         colors = CardDefaults.cardColors(
             containerColor = colorResource(id = R.color.tertiary_purple),
@@ -62,7 +66,8 @@ fun CategoryCardItem(items: Category){
             .fillMaxWidth()
             .padding(8.dp),
         elevation = CardDefaults.cardElevation(0.dp),
-        shape = RoundedCornerShape(16)
+        shape = RoundedCornerShape(16),
+        onClick = onClick
     ) {
         Column(
             Modifier
@@ -86,7 +91,7 @@ fun CategoryCardItem(items: Category){
             Text(
                 text = items.title,
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 16.sp
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
