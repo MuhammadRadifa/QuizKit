@@ -30,9 +30,14 @@ import androidx.compose.ui.unit.sp
 import com.example.quizkit.R
 
 
-@Preview(showBackground = true)
 @Composable
-fun QuizResult() {
+fun QuizResult(
+    correctAnswer: Int,
+    size: Int,
+    quiz: String,
+    navigateToQuiz: (String) -> Unit,
+    navigateToHome: () -> Unit
+) {
     Column(Modifier.background(color = colorResource(id = R.color.primary_purple))) {
         Card(
             modifier = Modifier
@@ -42,11 +47,14 @@ fun QuizResult() {
                 containerColor = colorResource(id = R.color.white)
             )
         ) {
-            Column(Modifier.fillMaxSize(),verticalArrangement = Arrangement.SpaceBetween) {
-                BoxResult()
+            Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
+                BoxResult(correctAnswer, size, quiz, navigateToQuiz)
                 Button(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier.fillMaxWidth().padding(16.dp).height(50.dp),
+                    onClick = navigateToHome,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .height(50.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(id = R.color.primary_purple)
                     ),
@@ -60,7 +68,10 @@ fun QuizResult() {
 }
 
 @Composable
-fun BoxResult() {
+fun BoxResult(
+    correctAnswer: Int, size: Int, quiz: String,
+    navigateToQuiz: (String) -> Unit,
+) {
     Column(Modifier.padding(16.dp)) {
         Card(
             modifier = Modifier
@@ -84,7 +95,9 @@ fun BoxResult() {
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navigateToQuiz(quiz)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(id = R.color.white_transparent)
                     ),
@@ -99,12 +112,15 @@ fun BoxResult() {
         Spacer(modifier = Modifier.height(16.dp))
         Column(Modifier.padding(8.dp)) {
             Row {
-                TextResult(title = "CORRECT ANSWER", value = "7 QUESTION")
+                TextResult(title = "CORRECT ANSWER", value = "$correctAnswer QUESTION")
                 Spacer(modifier = Modifier.weight(1f))
-                TextResult(title = "COMPLETION", value = "70%")
+                TextResult(
+                    title = "COMPLETION",
+                    value = "${if (correctAnswer == 0) 0 else (correctAnswer * 100) / size}%"
+                )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            TextResult(title = "INCORRECT ANSWER", value = "3 QUESTION")
+            TextResult(title = "INCORRECT ANSWER", value = "${size - correctAnswer} QUESTION")
         }
     }
 }

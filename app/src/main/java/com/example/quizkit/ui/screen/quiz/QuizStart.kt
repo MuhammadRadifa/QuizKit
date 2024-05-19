@@ -32,19 +32,33 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.quizkit.R
+import com.example.quizkit.data.common.Category
+import com.example.quizkit.data.common.SettingsQuiz
+import com.example.quizkit.data.common.quizCategoryDescription
+import com.example.quizkit.data.common.quizCategoryId
+import kotlinx.coroutines.flow.collect
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun QuizStart() {
+fun QuizStart(
+    quizCategory: String,
+    quiz: String,
+    settingsQuiz: SettingsQuiz,
+    navigateToOption: () -> Unit,
+    navigateToGames:(SettingsQuiz) -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,14 +66,29 @@ fun QuizStart() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(painter = painterResource(id = R.drawable.new_quest), contentDescription = "image data")
+        Image(
+            painter = painterResource(id = R.drawable.new_quest),
+            contentDescription = "image data"
+        )
         Spacer(modifier = Modifier.height(16.dp))
-        QuizContent()
+        QuizContent(quizCategory, quiz, settingsQuiz, navigateToOption,navigateToGames)
     }
 }
 
 @Composable
-fun QuizContent() {
+fun QuizContent(
+    quizCategory: String,
+    quiz: String,
+    settingsQuiz: SettingsQuiz,
+    navigateToOption: () -> Unit,
+    navigateToGames: (SettingsQuiz) -> Unit,
+) {
+    val settingsData = settingsQuiz.copy(
+        category = quizCategoryId[quiz]!!,
+        type = if (settingsQuiz.type == "mixed") "" else settingsQuiz.type,
+        difficulty = if (settingsQuiz.difficulty == "mixed") "" else settingsQuiz.difficulty
+    )
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -69,15 +98,21 @@ fun QuizContent() {
         )
     ) {
         Column(Modifier.padding(16.dp)) {
-            ContentHeader()
+            ContentHeader(quizCategory, quiz, navigateToOption)
             Spacer(modifier = Modifier.height(16.dp))
-            QuizType()
+
+
+            QuizType(settingsQuiz = settingsQuiz)
+
+
             Spacer(modifier = Modifier.height(16.dp))
-            ContentDescription()
+            ContentDescription(quiz)
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { /*TODO*/ },
+                onClick = {
+                    navigateToGames(settingsData)
+                },
                 colors = ButtonDefaults.buttonColors(
                     contentColor = colorResource(id = R.color.white_background),
                     containerColor = colorResource(id = R.color.primary_purple)
@@ -91,7 +126,7 @@ fun QuizContent() {
 }
 
 @Composable
-fun ContentHeader() {
+fun ContentHeader(quizCategory: String, quiz: String, navigateToOption: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -99,13 +134,13 @@ fun ContentHeader() {
     ) {
         Column {
             Text(
-                text = "Entertaiment",
-                fontSize = 20.sp
+                text = quizCategory,
+                fontSize = 16.sp
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Video Games",
-                fontSize = 32.sp,
+                text = quiz,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -117,7 +152,7 @@ fun ContentHeader() {
                     color = colorResource(id = R.color.secondary_blue),
                     shape = CircleShape
                 ),
-            onClick = { /*TODO*/ },
+            onClick = navigateToOption,
             colors = IconButtonDefaults.iconButtonColors(
                 contentColor = colorResource(id = R.color.white_background),
                 containerColor = colorResource(id = R.color.primary_purple)
@@ -133,7 +168,7 @@ fun ContentHeader() {
 }
 
 @Composable
-fun QuizType() {
+fun QuizType(settingsQuiz: SettingsQuiz) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -146,17 +181,20 @@ fun QuizType() {
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BoxType(painter = R.drawable.baseline_question_mark_24, text = "10 Question")
+            BoxType(
+                painter = R.drawable.baseline_question_mark_24,
+                text = "${settingsQuiz.amount} Question"
+            )
             Spacer(modifier = Modifier.width(30.dp))
-            BoxType(painter = R.drawable.baseline_ballot_24, text = "Medium")
+            BoxType(painter = R.drawable.baseline_ballot_24, text = settingsQuiz.difficulty)
         }
         Spacer(modifier = Modifier.height(16.dp))
-        BoxType(painter = R.drawable.box_stype, text = "Mixed")
+        BoxType(painter = R.drawable.box_stype, text = settingsQuiz.type)
     }
 }
 
 @Composable
-fun BoxType(painter:Int, text:String) {
+fun BoxType(painter: Int, text: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Column(
             Modifier
@@ -179,16 +217,17 @@ fun BoxType(painter:Int, text:String) {
 }
 
 @Composable
-fun ContentDescription(){
+fun ContentDescription(category: String) {
     Column {
         Text(
             text = "Description",
-            fontSize = 20.sp
+            fontSize = 16.sp
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "This quiz is designed to challenge players on various aspects of the gaming universe, from the classics to the latest releases.",
-            fontSize = 20.sp,
+            text = quizCategoryDescription[category]!!,
+            fontSize = 16.sp,
+            maxLines = 4,
             fontWeight = FontWeight.SemiBold
         )
     }
