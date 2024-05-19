@@ -3,6 +3,7 @@ package com.example.quizkit.ui.screen.profile
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,9 +41,21 @@ import com.example.quizkit.R
 import com.example.quizkit.data.common.avatarProfile
 import com.example.quizkit.data.common.backgroundProfile
 
-@Preview
 @Composable
-fun DialogAvatarProfile(){
+fun DialogAvatarProfile(
+    avatar: Int,
+    background: Int,
+    onClick: (Int, Int) -> Unit
+){
+
+    var avatarState by remember {
+        mutableStateOf(avatar)
+    }
+
+    var backgroundState by remember {
+        mutableStateOf(background)
+    }
+
     Column(
         Modifier
             .clip(shape = RoundedCornerShape(8))
@@ -50,14 +67,20 @@ fun DialogAvatarProfile(){
             fontSize = 28.sp
         )
         Spacer(modifier = Modifier.height(16.dp))
-        AvatarBox()
+        AvatarBox(
+            avatarState = avatarState,
+            onChange = { avatarState = it }
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Divider()
         Spacer(modifier = Modifier.height(16.dp))
-        ColorBox()
+        ColorBox(
+            backgroundState = backgroundState,
+            onChange = { backgroundState = it }
+        )
         Spacer(modifier = Modifier.height(20.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onClick(avatarState, backgroundState) },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.primary_purple)
@@ -69,7 +92,10 @@ fun DialogAvatarProfile(){
 }
 
 @Composable
-fun AvatarBox(){
+fun AvatarBox(
+    avatarState: Int,
+    onChange: (Int) -> Unit
+){
     LazyVerticalGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         columns = GridCells.Fixed(4)
@@ -82,13 +108,14 @@ fun AvatarBox(){
                     .height(60.dp)
                     .padding(horizontal = 4.dp)
                     .then(
-                        if (1 == it) Modifier.border(
+                        if (avatarState == it) Modifier.border(
                             2.5.dp,
                             colorResource(id = R.color.primary_purple),
                             shape = RoundedCornerShape(20)
                         ) else Modifier
                     ),
                 shape = RoundedCornerShape(20),
+                onClick = { onChange(it) }
             ) {
                 Image(
                     painter = painterResource(id = avatarProfile[it]!!),
@@ -103,7 +130,10 @@ fun AvatarBox(){
 }
 
 @Composable
-fun ColorBox(){
+fun ColorBox(
+    backgroundState: Int,
+    onChange: (Int) -> Unit
+){
     LazyVerticalGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(24.dp),
@@ -118,13 +148,13 @@ fun ColorBox(){
                     .clip(shape = CircleShape)
                     .background(color = colorResource(id = backgroundProfile[it]!!))
                     .then(
-                        if (6 == it) Modifier.border(
+                        if (backgroundState == it) Modifier.border(
                             2.5.dp,
                             colorResource(id = R.color.primary_purple),
                             shape = CircleShape
                         ) else Modifier
                     )
-
+                    .clickable { onChange(it) }
             )
         }
     }
