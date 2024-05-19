@@ -2,6 +2,7 @@ package com.example.quizkit.presentation
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,31 +18,29 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MainApp(
     mainViewModel: MainViewModel = koinViewModel()
-){
+) {
     val navController = rememberNavController()
-    val token = mainViewModel.getToken().value
 
-    val destination = if(token?.isEmpty() == true){
-        Screen.OnBoarding.route
-    }else{
-        Screen.Main.route
-    }
-
-    NavHost(navController = navController, startDestination = destination){
-        composable(Screen.OnBoarding.route){
-            OnBoarding(navController)
-        }
-        composable(Screen.Welcome.route){
-            WelcomeScreen(navController)
-        }
-        composable(Screen.Login.route){
-            LoginScreen(navController)
-        }
-        composable(Screen.Register.route){
-            RegisterScreen(navController)
-        }
-        composable(Screen.Main.route){
-            MainScreen()
+    mainViewModel.token.collectAsState().value.let { token ->
+        NavHost(
+            navController = navController,
+            startDestination = if (token == null) Screen.OnBoarding.route else Screen.Main.route
+        ) {
+            composable(Screen.OnBoarding.route) {
+                OnBoarding(navController)
+            }
+            composable(Screen.Welcome.route) {
+                WelcomeScreen(navController)
+            }
+            composable(Screen.Login.route) {
+                LoginScreen(navController)
+            }
+            composable(Screen.Register.route) {
+                RegisterScreen(navController)
+            }
+            composable(Screen.Main.route) {
+                MainScreen()
+            }
         }
     }
 }
