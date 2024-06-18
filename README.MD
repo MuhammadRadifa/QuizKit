@@ -43,7 +43,7 @@ Check out the live demo of Quiz Kit [CLICK DEMO VIDEO HERE](https://www.youtube.
    - In the local.properties file (create it in the root project directory if it doesn't exist), add the following line:
 
    ```
-   API_URL=API_URL=https://opentdb.com/
+   API_URL=https://opentdb.com/
    ```
 
    note : [disclaimer](#disclaimer)
