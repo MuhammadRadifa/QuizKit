@@ -25,7 +25,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -189,6 +191,7 @@ fun QuizQuestion(
 ) {
 
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val incorrectAnswers = quiz[pagerState.currentPage].incorrectAnswers
     val combinedAnswers = mutableListOf<String>() // Explicitly define type as List<String>
@@ -232,7 +235,10 @@ fun QuizQuestion(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            HorizontalPager(state = pagerState) {
+            HorizontalPager(
+                state = pagerState,
+                userScrollEnabled = false,
+            ) {
                 Column {
                     Text(
                         text = "QUESTION ${pagerState.currentPage + 1} OF ${quiz.size}",
@@ -257,10 +263,14 @@ fun QuizQuestion(
                     Spacer(modifier = Modifier.height(16.dp))
                     //lazy column
                     val isSelected = remember { mutableStateOf(false) }
-                    LazyColumn(Modifier.fillMaxHeight(0.9f)) {
+                    Column(
+                        Modifier
+                            .fillMaxHeight(0.8f)
+                            .verticalScroll(rememberScrollState())) {
 
-                        items(combinedAnswers) {
-                            isSelected.value = answer.size > pagerState.currentPage && answer[pagerState.currentPage] == it
+                        combinedAnswers.forEach {
+                            isSelected.value =
+                                answer.size > pagerState.currentPage && answer[pagerState.currentPage] == it
                             Button(
                                 onClick = {
                                     answer.add(pagerState.currentPage, it)
@@ -268,15 +278,16 @@ fun QuizQuestion(
                                         answer.removeAt(pagerState.currentPage + 1)
                                     }
 
-                                    isSelected.value = answer.size > pagerState.currentPage && answer[pagerState.currentPage] == it
+                                    isSelected.value =
+                                        answer.size > pagerState.currentPage && answer[pagerState.currentPage] == it
                                 },
                                 shape = RoundedCornerShape(10.dp),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 4.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = colorResource(id = if (answer.contains(it) || isSelected.value) R.color.primary_purple else R.color.white),
-                                    contentColor = colorResource(id = if (answer.contains(it) || isSelected.value) R.color.white else R.color.black)
+                                    containerColor = colorResource(id = if (isSelected.value) R.color.primary_purple else R.color.white),
+                                    contentColor = colorResource(id = if (isSelected.value) R.color.white else R.color.black)
                                 ),
                                 border = BorderStroke(0.5.dp, colorResource(id = R.color.black)),
                                 contentPadding = PaddingValues(16.dp)
@@ -305,18 +316,17 @@ fun QuizQuestion(
                 if (pagerState.currentPage != 0) {
                     IconButton(
                         onClick = {
-
                             scope.launch {
                                 pagerState.scrollToPage(pagerState.currentPage - 1)
                             }
-
-
                         },
-                        modifier = Modifier.border(
-                            1.5.dp,
-                            colorResource(id = R.color.primary_purple),
-                            shape = RoundedCornerShape(10.dp)
-                        )
+                        modifier = Modifier
+                            .border(
+                                1.5.dp,
+                                colorResource(id = R.color.primary_purple),
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .height(64.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.back),
@@ -329,7 +339,15 @@ fun QuizQuestion(
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
-                        if (!isSubmit) {
+                        if (answer.size != pagerState.currentPage + 1) {
+                            Log.i("answer", answer.size.toString())
+                            Log.i("pageCount", pagerState.currentPage.toString())
+                            Toast.makeText(
+                                context,
+                                "Please select an answer",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else if (!isSubmit) {
                             scope.launch {
                                 pagerState.scrollToPage(pagerState.currentPage + 1)
                             }
@@ -353,7 +371,7 @@ fun QuizQuestion(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(64.dp),
+                        .height(60.dp),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(id = R.color.primary_purple),
