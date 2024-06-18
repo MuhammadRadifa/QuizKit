@@ -2,6 +2,7 @@ package com.example.quizkit.ui.screen.authentication
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -119,7 +120,9 @@ fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel = 
                 },
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().clickable {
+                    navController.navigate(Screen.Login.route)
+                }
             )
 
             val alert = authViewModel.registerThread.value
