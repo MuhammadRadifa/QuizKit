@@ -64,6 +64,7 @@ import com.example.quizkit.data.common.iconCategory
 import com.example.quizkit.data.network.local.room.HistoryEntity
 import com.example.quizkit.data.network.remote.response.ResultsItem
 import com.example.quizkit.ui.utils.countMatchingElements
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -192,6 +193,7 @@ fun QuizQuestion(
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val gson = Gson()
 
     val incorrectAnswers = quiz[pagerState.currentPage].incorrectAnswers
     val combinedAnswers = mutableListOf<String>() // Explicitly define type as List<String>
@@ -361,7 +363,10 @@ fun QuizQuestion(
                                 quiz = quizName,
                                 category = category,
                                 correctAnswer = countMatch,
-                                size = answerSize
+                                size = answerSize,
+                                question = gson.toJson(quiz),
+                                correctAnswerData = gson.toJson(correctAnswer),
+                                userAnswerData = gson.toJson(answer)
                             )
 
                             quizViewModel.insertHistory(data)

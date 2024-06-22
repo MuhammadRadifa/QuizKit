@@ -19,6 +19,10 @@ interface QuizDao {
     //select latest history from database
     @Query("SELECT * FROM history ORDER BY id DESC LIMIT 1")
     fun getLatestHistory(): Flow<HistoryEntity>
+
+    //get history by id
+    @Query("SELECT * FROM history WHERE id = :id")
+    fun getHistoryById(id: Int): Flow<HistoryEntity>
 }
 
 @Dao

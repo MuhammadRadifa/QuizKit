@@ -43,7 +43,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HistoryScreen(
-    navigateToHistory: (Int, Int, String, String) -> Unit,
+    navigateToHistory: (Int, Int, Int, String, String) -> Unit,
     historyViewModel: HistoryViewModel = koinViewModel()
 ) {
     Surface(
@@ -87,21 +87,25 @@ fun HistoryScreen(
                 }
             }
         }
-
-
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryCard(history: HistoryEntity, navigateToHistory: (Int, Int, String, String) -> Unit) {
+fun HistoryCard(history: HistoryEntity, navigateToHistory: (Int,Int, Int, String, String) -> Unit) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent
         ),
         border = BorderStroke(1.dp, color = colorResource(id = R.color.secondary_blue)),
         onClick = {
-            navigateToHistory(history.correctAnswer, history.size, history.quiz, history.category)
+            navigateToHistory(
+                history.id,
+                history.correctAnswer,
+                history.size,
+                history.quiz,
+                history.category
+            )
         },
     ) {
         Row(

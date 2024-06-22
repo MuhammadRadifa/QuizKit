@@ -25,4 +25,6 @@ class QuizRepository(
     fun getHistory(): Flow<List<HistoryEntity>> = quizDao.getHistory()
 
     fun getLatestHistory():Flow<HistoryEntity> = quizDao.getLatestHistory()
+
+    fun getHistoryById(id: Int): Flow<HistoryEntity> = quizDao.getHistoryById(id)
 }

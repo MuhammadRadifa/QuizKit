@@ -17,9 +17,14 @@ class QuizViewModel(
     private val quizRepository: QuizRepository
 ) : ViewModel() {
 
-    val _quiz = MutableStateFlow(ResponseState<List<ResultsItem>>())
+    private val _quiz = MutableStateFlow(ResponseState<List<ResultsItem>>())
     val quiz:StateFlow<ResponseState<List<ResultsItem>>> = _quiz
 
+    private val _history = MutableStateFlow(ResponseState<HistoryEntity>())
+    val history:StateFlow<ResponseState<HistoryEntity>> = _history
+
+    private val _getLatestHistory = MutableStateFlow(ResponseState<HistoryEntity>())
+    val getLatestHistory:StateFlow<ResponseState<HistoryEntity>> = _getLatestHistory
 
     fun getQuiz(settings: SettingsQuiz) {
         viewModelScope.launch {
@@ -59,6 +64,30 @@ class QuizViewModel(
     fun insertHistory(historyEntity: HistoryEntity){
         viewModelScope.launch {
             quizRepository.insertHistory(historyEntity)
+        }
+    }
+
+    fun getLatestHistory(){
+        viewModelScope.launch {
+            quizRepository.getLatestHistory().collect {
+                _getLatestHistory.value = _getLatestHistory.value.copy(
+                    loading = false,
+                    data = it,
+                    error = null
+                )
+            }
+        }
+    }
+
+    fun getHistoryById(id: Int){
+        viewModelScope.launch {
+            quizRepository.getHistoryById(id).collect {
+                _history.value = _history.value.copy(
+                    loading = false,
+                    data = it,
+                    error = null
+                )
+            }
         }
     }
 

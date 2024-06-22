@@ -22,6 +22,7 @@ sealed class Screen(val route: String) {
     data object QuizResult : Screen("QuizResult")
     data object QuizMode : Screen("QuizDetail")
     data object QuizOption : Screen("QuizOption")
+    data object QuizAnswerResult : Screen("QuizAnswerResult")
 }
 
 

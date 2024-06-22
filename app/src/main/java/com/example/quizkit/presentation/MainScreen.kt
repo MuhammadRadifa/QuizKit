@@ -23,6 +23,7 @@ import com.example.quizkit.ui.screen.category.SelectQuizScreen
 import com.example.quizkit.ui.screen.history.HistoryScreen
 import com.example.quizkit.ui.screen.home.HomeScreen
 import com.example.quizkit.ui.screen.profile.ProfileScreen
+import com.example.quizkit.ui.screen.quiz.QuizAnswerResultScreen
 import com.example.quizkit.ui.screen.quiz.QuizMode
 import com.example.quizkit.ui.screen.quiz.QuizOption
 import com.example.quizkit.ui.screen.quiz.QuizResult
@@ -82,9 +83,9 @@ fun MainScreen() {
                 ProfileScreen()
             }
             composable(Screen.History.route) {
-                HistoryScreen(navigateToHistory = { correctAnswer, size, quiz, category ->
+                HistoryScreen(navigateToHistory = { id,correctAnswer, size, quiz, category ->
                     navController.navigate(
-                        Screen.QuizResult.route + "/$correctAnswer/$size/$quiz/$category"
+                        Screen.QuizResult.route + "/$id/$correctAnswer/$size/$quiz/$category"
                     )
                 })
             }
@@ -129,21 +130,37 @@ fun MainScreen() {
                     category = category,
                     navigateToResult = { correctAnswer, size ->
                         navController.navigate(
-                            Screen.QuizResult.route + "/$correctAnswer/$size/$quizName/$category"
+                            Screen.QuizResult.route + "/null/$correctAnswer/$size/$quizName/$category"
                         )
                     })
             }
 
-            composable(Screen.QuizResult.route + "/{correctAnswer}/{size}/{quiz}/{quizCategory}") {
+            composable(Screen.QuizResult.route + "/{id}/{correctAnswer}/{size}/{quiz}/{quizCategory}") {
                 val correctAnswer = it.arguments?.getString("correctAnswer")?.toInt() ?: 0
                 val size = it.arguments?.getString("size")?.toInt() ?: 0
                 val quiz = it.arguments?.getString("quiz") ?: ""
                 val category = it.arguments?.getString("quizCategory") ?: ""
-                QuizResult(correctAnswer, size, quiz, navigateToQuiz = {
-                    navController.navigate(Screen.QuizStart.route + "/$category/$quiz")
-                }, navigateToHome = {
-                    navController.navigate(Screen.Home.route)
-                })
+                val id = it.arguments?.getString("id")?:"0"
+                QuizResult(
+                    id = if(id == "null") 0 else id.toInt(),
+                    correctAnswer = correctAnswer,
+                    size = size,
+                    quiz = quiz,
+                    navigateToQuiz = {
+                        navController.navigate(Screen.QuizStart.route + "/$category/$quiz")
+                    },
+                    navigateToHome = {
+                        navController.navigate(Screen.Home.route)
+                    },
+                    navigateToAnswer = {
+                        navController.navigate(Screen.QuizAnswerResult.route + "/$it")
+                    }
+                )
+
+            }
+            composable(Screen.QuizAnswerResult.route + "/{id}") {
+                val id = it.arguments?.getString("id") ?:"1"
+                QuizAnswerResultScreen(id = id.toInt())
             }
         }
     }

@@ -18,6 +18,12 @@ data class HistoryEntity(
     val correctAnswer: Int,
     @ColumnInfo(name = "size")
     val size: Int,
+    @ColumnInfo(name = "question")
+    val question: String,
+    @ColumnInfo(name = "userAnswerData")
+    val userAnswerData: String,
+    @ColumnInfo(name = "correctAnswerData")
+    val correctAnswerData: String,
 )
 
 @Entity(tableName = "user")

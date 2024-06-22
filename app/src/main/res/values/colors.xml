@@ -27,4 +27,6 @@
     <color name="orange_background">#FFFF8C51</color>
     <color name="yellow_background">#FFFFC85C</color>
     <color name="green_background">#FF9BCE7A</color>
+    <color name="red">#FFFF4F4F</color>
+    <color name="green">#FF9BCE7A</color>
 </resources>
