@@ -128,6 +128,9 @@ fun MainScreen() {
                 QuizMode(settingsQuiz = settingsQuizStart,
                     quizName = quizName,
                     category = category,
+                    navigateToStart = {
+                        navController.navigate(Screen.QuizStart.route + "/$category/$quizName")
+                    },
                     navigateToResult = { correctAnswer, size ->
                         navController.navigate(
                             Screen.QuizResult.route + "/null/$correctAnswer/$size/$quizName/$category"

@@ -28,6 +28,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -54,6 +55,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -76,6 +78,7 @@ fun QuizMode(
     category: String,
     settingsQuiz: SettingsQuiz,
     navigateToResult: (Int, Int) -> Unit,
+    navigateToStart: () -> Unit,
     quizViewModel: QuizViewModel = koinViewModel()
 ) {
     Column(
@@ -108,8 +111,11 @@ fun QuizMode(
                     val pagerState = rememberPagerState {
                         quiz.data.size
                     }
+                    val dialogState = remember { mutableStateOf(false) }
                     val answer = remember { mutableListOf<String>() }
-                    QuizProgress(quiz.data.size, pagerState)
+                    QuizProgress(quiz.data.size, pagerState) {
+                        dialogState.value = dialogState.value.not()
+                    }
                     QuizQuestion(
                         quizViewModel,
                         quiz.data,
@@ -119,6 +125,46 @@ fun QuizMode(
                         category,
                         navigateToResult
                     )
+                    if (dialogState.value) {
+                        AlertDialog(
+                            containerColor = colorResource(id = R.color.white),
+                            title = {
+                                Text(
+                                    text = "Are you sure you want to exit?"
+                                )
+                            },
+                            text = {
+                                Text(
+                                    text = "Your progress will not be saved and the quiz will not be recorded"
+                                )
+                            },
+                            onDismissRequest = {
+                                dialogState.value = false
+                            },
+                            confirmButton = {
+                                Row(
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Button(
+                                        onClick = {
+                                            dialogState.value = false
+                                        }
+                                    ) {
+                                        Text(text = "Cancel")
+                                    }
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    Button(
+                                        onClick = {
+                                            navigateToStart()
+                                        }
+                                    ) {
+                                        Text(text = "Yes, exit")
+                                    }
+                                }
+
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -128,7 +174,7 @@ fun QuizMode(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun QuizProgress(total: Int, pagerState: PagerState) {
+fun QuizProgress(total: Int, pagerState: PagerState, onClick: () -> Unit) {
     Row(
         Modifier
             .padding(16.dp)
@@ -160,7 +206,7 @@ fun QuizProgress(total: Int, pagerState: PagerState) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = onClick,
             shape = RoundedCornerShape(6.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.white_transparent),
@@ -268,7 +314,8 @@ fun QuizQuestion(
                     Column(
                         Modifier
                             .fillMaxHeight(0.8f)
-                            .verticalScroll(rememberScrollState())) {
+                            .verticalScroll(rememberScrollState())
+                    ) {
 
                         combinedAnswers.forEach {
                             isSelected.value =
